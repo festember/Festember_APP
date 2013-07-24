@@ -75,6 +75,7 @@ $action=$_GET['action'];
 
 		echo "
 		<link href='styles.css' rel='stylesheet'>
+
 		<div id='toplinks' style='position:absolute;top:20px;right:200px'>
 		<a href='./'>View</a>
 		<a href='./?action=editform'>Edit Form</a>
