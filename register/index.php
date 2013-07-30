@@ -46,7 +46,7 @@ $mcid=0;if(isset($_POST['mcid']))$mcid=$_POST['mcid'];if(isset($_SESSION['mcid']
 $userId=1;if(isset($_POST['userId']))$userId=$_POST['userId'];if(isset($_SESSION['userId']))$userId=$_SESSION['userId'];
 $con=mysql_connect($sqlhost,$sqluser,$sqlpass);
 mysql_select_db($database);
-
+session_start();
 require_once("form/common.lib.php");
 require_once("form/editform.php");
 require_once("form/editformelement.php");
@@ -57,11 +57,14 @@ require_once("form/viewregistrants.php");
 if(isset($_GET['action']))
 $action=$_GET['action'];
 
+		$adminids=array(1);
+		foreach($adminids as $id)
+		if($_SESSION['userid']==$id)
+		$user_is_admin=1;	// Set this to one only if user is admin
 
-
-		if($action=="editform")
+		if($user_is_admin && $action=="editform")
 		 $content=actionEditform();
-		else if($action=="viewregistrants")
+		else if($user_is_admin && $action=="viewregistrants")
 		 $content=actionViewregistrants();
 		/*
 		else if($action=="editregistrants")
@@ -76,10 +79,12 @@ $action=$_GET['action'];
 		echo "
 		<link href='styles.css' rel='stylesheet'>
 		<div id='toplinks' style='position:absolute;top:20px;right:200px'>
+		".
+		($user_is_admin?"
 		<a href='./'>View</a>
 		<a href='./?action=editform'>Edit Form</a>
 		<a href='./?action=viewregistrants'>View Registrants</a>
-		</div>
+		":"")."</div>
 		<div id='page-content'> $ERRORSTRING.$INFOSTRING.$WARNINGSTRING.$OTHER.$content </div>";
 		/* Options to be displayed :
 		 *
